@@ -57,9 +57,12 @@ docker-compose up -d
 Thank's for any donations to enable further development!
 
 AION ETH address: 0xC83658738795f5Dfbf91Da5d1E37A1B1c3Ad344c
-XMR address: 42hnfZMm78hPwKmjhN6pNffHpnaUBjCzddGctFRN5yTVHCmm4hFJcQaDgffcjUv6Q3GfirfyyqHLijfnDrJyyntwMSLZc6p
+
 Litecoin address: LdxTMGSUGLWfcULQQ6UWTNcJGGCLysefJ7
+
 Bitcoin address: 1H7GZ2SGQcDiEcbqdimn2C9AM4VGbqrBdx
+
+Ethereum address: 0x2a427da268c081466be59b41e0a7ad556f57e755
 
 ## Built With
 
