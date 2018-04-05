@@ -1,10 +1,10 @@
-# mining-aion-tokens
-This repo contains docker-compose script for mining AION Tokens on the testnet.
+# mining-aion-coin
+This repo contains docker-compose script for mining AION coins on the testnet.
 
 ## Getting Started
 
-These instructions will let you mine AION Tokens on Ubuntu 16.04 using CPU. The mined tokens are only mined on the testnet. They DON'T have any monetary value!
-But if the public net is launched in the near future this repo can you help you starting mining AION tokens.
+These instructions will let you mine AION coins on Ubuntu 16.04 using CPU. The mined coins are only mined on the testnet. They DON'T have any monetary value!
+But if the public net is launched in the near future this repo can you help you starting mining AION coins.
 
 
 ### Prerequisites
@@ -22,7 +22,7 @@ Docker-Compose (tested docker-compose version 1.19.0, build 9e633ef)
 clone this project:
 
 ```
-git clone https://github.com/sh39sxn/mining-aion-tokens.git
+git clone https://github.com/sh39sxn/mining-aion-coins.git
 ```
 
 Then change to the project folder and adjust the mining address in the file [aion-kernel.Dockerfile](aion-kernel.Dockerfile)
@@ -39,7 +39,7 @@ This will create a temporary Docker Container. Just type your password and you w
 
 Now run docker-compose:
 ```
-cd mining-aion-tokens
+cd mining-aion-coins
 docker-compose up
 ```
 
