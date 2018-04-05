@@ -1,4 +1,4 @@
-# ltc-mining-aws
+# mining-aion-tokens
 This repo contains docker-compose script for mining AION Tokens on the testnet.
 
 ## Getting Started
