@@ -1,0 +1,31 @@
+version: "3"
+services:
+  kernel:
+    build:
+      dockerfile: ./aion-kernel.Dockerfile
+      context: .
+    image: aion:kernel
+    ports:
+     - "8545:8545"
+  solo-mining-pool:
+    build:
+      dockerfile: ./aion-solo-mining-pool.Dockerfile
+      context: .
+    image: aion:solo_mining_pool
+    ports:
+     - "3333:3333"
+    links:
+     - kernel
+     - redis
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+  cpu-miner:
+    build:
+      dockerfile: ./aion-cpu-miner.Dockerfile
+      context: .
+    links:
+     -  solo-mining-pool
+    command: ./aionminer -t 2 -l solo-mining-pool:3333
