@@ -25,16 +25,10 @@ clone this project:
 git clone https://github.com/sh39sxn/mining-aion-coins.git
 ```
 
-Then change to the project folder and adjust the mining address in the file [aion-kernel.Dockerfile](aion-kernel.Dockerfile)
-```
-ENV AION_MINING_ADDRESS=0x618d1ce29422bb29f280dc8533bcbcf6ff8b9d85651a21a6073fa31de26e2e7a
-```
+In order to adjust settings please edit the environment files [aion-cpu-miner.env](aion-cpu-miner.env) [aion-cpu-miner.env](aion-gpu-miner.env) [aion-kernel.env](aion-kernel.env) [aion-solo-mining-pool.env](aion-solo-mining-pool.env)
 
-In order to create an mining address please run:
-```
-docker run -it --rm aion:kernel /opt/aion/aion.sh -a create
-```
-This will create a temporary Docker Container. Just type your password and you will receive a mining address.
+
+For more explanations about the environment variables please visit my Repo at the Docker Hub: https://hub.docker.com/u/sh39sxn/
 
 
 Now run docker-compose:
