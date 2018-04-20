@@ -15,6 +15,7 @@ You need the following setup:
 Ubuntu 16.04
 Docker (tested Docker version 18.03.0-ce, build 0520e24)
 Docker-Compose (tested docker-compose version 1.19.0, build 9e633ef)
+Nvidia-Docker (if you want to mine via GPU)
 ```
 
 ### Installing
@@ -62,7 +63,7 @@ Ethereum address: 0x2a427da268c081466be59b41e0a7ad556f57e755
 
 * [Docker](https://www.docker.com/)
 * [Docker Compose](https://docs.docker.com/compose/)
-
+* [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker)
 
 ## License
 
