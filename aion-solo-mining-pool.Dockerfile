@@ -1,5 +1,12 @@
 FROM ubuntu:16.04
 
+ENV REDIS_HOST=localhost
+ENV KERNEL_HOST=localhost
+
+# replaceholder for downloading specific version
+#ARG MINER_VERSION=v0.1.10  # use v as prefix for this version and for 0.1.11
+ARG MINER_VERSION=0.2.0
+
 RUN apt-get update && apt-get install -y \
         curl \
         wget \
@@ -31,22 +38,15 @@ RUN npm install --save nan
 RUN npm install bindings
 
 
+RUN curl -s https://api.github.com/repos/aionnetwork/aion_miner/releases/tags/$MINER_VERSION | jq --raw-output '.assets[0] | .browser_download_url' | xargs wget -O aion-solo-pool.tar.gz
+RUN tar -xvzf ./aion-solo-pool.tar.gz
+RUN ls -la
 
-RUN git clone https://github.com/aionnetwork/aion_miner.git
-
-
-# replace 127.0.0.1 with "redis" in order to use docker-compose
-RUN jq '.redis.host="redis"' ./aion_miner/aion_solo_pool/config.json | sponge ./aion_miner/aion_solo_pool/config.json
-RUN jq '.defaultPoolConfigs.redis.host="redis"' ./aion_miner/aion_solo_pool/config.json | sponge ./aion_miner/aion_solo_pool/config.json
-
-RUN jq '.daemons[0].host="kernel"' ./aion_miner/aion_solo_pool/pool_configs/aion.json | sponge ./aion_miner/aion_solo_pool/pool_configs/aion.json
-RUN jq '.paymentProcessing.daemon.host="kernel"' ./aion_miner/aion_solo_pool/pool_configs/aion.json | sponge ./aion_miner/aion_solo_pool/pool_configs/aion.json
-
-RUN cd ./aion_miner/aion_solo_pool/local_modules/equihashverify && node-gyp configure && node-gyp build && ldconfig -v && node-gyp rebuild && node test.js  
+RUN cd ./local_modules/equihashverify && node-gyp configure && node-gyp build && ldconfig -v && node-gyp rebuild && node test.js  
 #(should print a table, if not try: sudo ldconfig -v --> node-gyp rebuild --> node test.js)
 
 WORKDIR /opt
-RUN cd ./aion_miner/aion_solo_pool/ && chown -R root:root . && npm install
+RUN chown -R root:root . && npm install
 #(needed because npm install fails because of missing permissions)
 
 
@@ -56,8 +56,10 @@ RUN cd ./aion_miner/aion_solo_pool/ && chown -R root:root . && npm install
 
 RUN npm install --unsafe-perm bignum && npm rebuild --unsafe-perm
 
-WORKDIR ./aion_miner/aion_solo_pool
-CMD ./run.sh
+COPY ./start-solo-mining-pool.sh ./start-solo-mining-pool.sh
+
+CMD ./start-solo-mining-pool.sh $REDIS_HOST $KERNEL_HOST
+#CMD ./run.sh
 
 #   docker build -f aion-solo-mining-pool.Dockerfile -t aion:solo_mining_pool .
-#   docker run --net=miningaiontokens_default --rm --name solo-mining-pool aion:solo_mining_pool 
+#   docker run --net=miningaioncoins_default --rm --name solo-mining-pool aion:solo_mining_pool 

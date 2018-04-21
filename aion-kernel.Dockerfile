@@ -2,11 +2,16 @@ FROM ubuntu:16.04
 
 ENV AION_MINING_ADDRESS=0x618d1ce29422bb29f280dc8533bcbcf6ff8b9d85651a21a6073fa31de26e2e7a
 
+# replaceholder for downloading specific version
+ARG KERNEL_VERSION=v0.1.16
+
 RUN apt-get update && apt-get install -y \
         bzip2 \
         lsb-release \
         wget \
-        locales
+        locales \
+        curl \
+        jq
 
 WORKDIR /opt
 
@@ -17,22 +22,26 @@ ENV LANG de_DE.UTF-8
 ENV LANGUAGE de_DE:de  
 ENV LC_ALL de_DE.UTF-8    
 
-RUN wget https://github.com/aionnetwork/aion/releases/download/v0.1.16/aion-v0.1.16.c46ff11-2018-03-20.tar.bz2
-RUN tar -xvjf ./aion-v0.1.16.c46ff11-2018-03-20.tar.bz2
+# download latest
+#RUN curl -s https://api.github.com/repos/aionnetwork/aion/releases/latest |   jq --raw-output '.assets[0] | .browser_download_url' | xargs wget -O kernel.tar.bz2
+
+# download specific AION Kernel version
+RUN curl -s https://api.github.com/repos/aionnetwork/aion/releases/tags/$KERNEL_VERSION | jq --raw-output '.assets[0] | .browser_download_url' | xargs wget -O kernel.tar.bz2
+RUN tar -xvjf ./kernel.tar.bz2
 
 # allow external access to AION kernel
 RUN sed 's/ip=\"127.0.0.1\"/ip=\"0.0.0.0\"/g' -i /opt/aion/config/config.xml
 
-# set miner address
-RUN sed "s/<miner-address>.*\/miner-address>/<miner-address>$AION_MINING_ADDRESS<\/miner-address>/g" -i /opt/aion/config/config.xml
+# set miner address, previously used, no set in CMD layer
+#RUN sed "s/<miner-address>.*\/miner-address>/<miner-address>$AION_MINING_ADDRESS<\/miner-address>/g" -i /opt/aion/config/config.xml
 
 # add sleep command before starting java environment because it leaded to some textfile busy errors when starting the AION kernel
 RUN sed '/\/rt\/bin\/java/ i\sleep \5;' -i /opt/aion/aion.sh
 
 # start AION kernel
 WORKDIR /
-CMD /opt/aion/aion.sh
+CMD sed "s/<miner-address>.*\/miner-address>/<miner-address>$AION_MINING_ADDRESS<\/miner-address>/g" -i /opt/aion/config/config.xml && /opt/aion/aion.sh
 
 
 #    docker build -f aion-kernel.Dockerfile -t aion:kernel .
-#    docker run -it --net=miningaiontokens_default --rm -p 8545:8545 --name kernel aion:kernel bash
+#    docker run -it --net=miningaioncoins_default --rm -p 8545:8545 --name kernel aion:kernel bash
