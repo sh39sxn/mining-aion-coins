@@ -29,7 +29,25 @@ git clone https://github.com/sh39sxn/mining-aion-coins.git
 In order to adjust settings please edit the environment files [aion-cpu-miner.env](aion-cpu-miner.env) [aion-cpu-miner.env](aion-gpu-miner.env) [aion-kernel.env](aion-kernel.env) [aion-solo-mining-pool.env](aion-solo-mining-pool.env)
 
 
-For more explanations about the environment variables please visit my Repo at the Docker Hub: https://hub.docker.com/u/sh39sxn/
+For more explanations about the environment variables for each single Container please visit my Repo at the Docker Hub: https://hub.docker.com/u/sh39sxn/
+
+In order to use nvidia-docker with docker-compose you have to set the Docker runtime to nvidia. So add this line to your /etc/docker/daemon.json:
+```
+"default-runtime": "nvidia"
+```
+
+So your config should look similar to:
+```
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+```
 
 
 Now run docker-compose:
