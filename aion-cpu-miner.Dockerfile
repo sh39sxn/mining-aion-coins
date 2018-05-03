@@ -3,6 +3,7 @@ FROM ubuntu:16.04
 ENV NUMBER_CPU_THREADS=1
 ENV MINING_POOL_ADDRESS=localhost
 ENV MINING_POOL_PORT=3333
+ENV MINING_ADDRESS=0xa002b257cdc41ec76cbc9e30e1f1d93d0fe702201a45ab588ccabaadd5606e22
 
 # replaceholder for downloading specific version
 #ARG MINER_VERSION=v0.1.10  # use v as prefix for this version
@@ -22,7 +23,7 @@ RUN curl -s https://api.github.com/repos/aionnetwork/aion_miner/releases/tags/$M
 RUN tar -xvjf ./aionminer_CPU.tar.bz2
 
 # start CPU Miner with maximum of CPU Threads
-CMD ./aionminer -t $NUMBER_CPU_THREADS -l $MINING_POOL_ADDRESS:$MINING_POOL_PORT
+CMD ./aionminer -t $NUMBER_CPU_THREADS -l $MINING_POOL_ADDRESS:$MINING_POOL_PORT -u $MINING_ADDRESS
 
 #   docker build -f aion-cpu-miner.Dockerfile -t aion:cpu-miner .
 #   docker run -it --net=miningaioncoins_default --rm --name cpu_miner sh39sxn/aion-miner-cpu:latest bash
