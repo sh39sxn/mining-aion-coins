@@ -62,4 +62,4 @@ CMD ./start-solo-mining-pool.sh $REDIS_HOST $KERNEL_HOST
 #CMD ./run.sh
 
 #   docker build -f aion-solo-mining-pool.Dockerfile -t aion:solo_mining_pool .
-#   docker run --net=miningaioncoins_default --rm --name solo-mining-pool aion:solo_mining_pool 
+#   docker run -it --net=miningaioncoins_default --rm --name solo-mining-pool aion:solo_mining_pool bash

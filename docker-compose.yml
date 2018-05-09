@@ -32,3 +32,12 @@ services:
      -  ./aion-gpu-miner.env
     links:
      -  solo-mining-pool
+  gpu-smartminer:
+    image: aion:aion_smartminer
+    env_file:
+     -  ./aion-gpu-smartminer.env
+    links:
+     -  solo-mining-pool
+
+# use gpu-miner or gpu-smartminer, just uncomment the lines above for the container you don't want to use
+# usually smartminer is much faster than the defaut gpu-miner from AION

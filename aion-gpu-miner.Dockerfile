@@ -28,7 +28,8 @@ RUN tar -xvjf ./aionminer_GPU.tar.bz2
 CMD ./aionminer -cd $DEVICE -cv $CUDA_SOLVER -cb $NUMBER_BLOCKS -ct $NUMBER_THREADS -l $MINING_POOL_ADDRESS:$MINING_POOL_PORT -u $MINING_ADDRESS
 
 
+# for local testing, some examples:
 #   docker build -f aion-gpu-miner.Dockerfile -t aion:gpu-miner .
-#   docker run -it -e MINING_POOL_ADDRESS=solo-mining-pool --net=miningaioncoins_default --runtime=nvidia --rm --name sh39sxn/aion-miner-gpu:latest bash
+#   docker run -it -e MINING_POOL_ADDRESS=solo-mining-pool --net=miningaioncoins_default --runtime=nvidia --rm --name aion-miner-gpu aion:gpu-miner bash
 #   docker run -it --env-file ./aion-gpu-miner.env --net=miningaioncoins_default --runtime=nvidia --rm --name gpu_miner aion:gpu-miner bash
 #   ./aionminer -cd 0 -cv 1 -cb 64 -ct 64 -l solo-mining-pool
