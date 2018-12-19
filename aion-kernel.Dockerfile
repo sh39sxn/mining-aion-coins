@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 ENV AION_MINING_ADDRESS=0x618d1ce29422bb29f280dc8533bcbcf6ff8b9d85651a21a6073fa31de26e2e7a
-
+ENV AION_NETWORK=mainnet
 # replaceholder for downloading specific version
 ARG KERNEL_VERSION=v0.1.16
 
@@ -29,18 +29,17 @@ ENV LC_ALL de_DE.UTF-8
 RUN curl -s https://api.github.com/repos/aionnetwork/aion/releases/tags/$KERNEL_VERSION | jq --raw-output '.assets[0] | .browser_download_url' | xargs wget -O kernel.tar.bz2
 RUN tar -xvjf ./kernel.tar.bz2
 
-# allow external access to AION kernel
-RUN sed 's/ip=\"127.0.0.1\"/ip=\"0.0.0.0\"/g' -i /opt/aion/config/config.xml
-
 # set miner address, previously used, no set in CMD layer
 #RUN sed "s/<miner-address>.*\/miner-address>/<miner-address>$AION_MINING_ADDRESS<\/miner-address>/g" -i /opt/aion/config/config.xml
 
 # add sleep command before starting java environment because it leaded to some textfile busy errors when starting the AION kernel
 RUN sed '/\/rt\/bin\/java/ i\sleep \5;' -i /opt/aion/aion.sh
 
-# start AION kernel
+## change miner address, allow external access to AION kernel, then start AION kernel with specified Aion Network
 WORKDIR /
-CMD sed "s/<miner-address>.*\/miner-address>/<miner-address>$AION_MINING_ADDRESS<\/miner-address>/g" -i /opt/aion/config/config.xml && /opt/aion/aion.sh
+CMD sed "s/<miner-address>.*\/miner-address>/<miner-address>$AION_MINING_ADDRESS<\/miner-address>/g" -i /opt/aion/config/$AION_NETWORK/config.xml && \
+        sed 's/ip=\"127.0.0.1\"/ip=\"0.0.0.0\"/g' -i /opt/aion/config/$AION_NETWORK/config.xml && \
+        /opt/aion/aion.sh -n $AION_NETWORK
 
 
 #    docker build -f aion-kernel.Dockerfile -t aion:kernel .
