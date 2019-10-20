@@ -35,10 +35,12 @@ RUN tar -xvjf ./kernel.tar.bz2
 # add sleep command before starting java environment because it leaded to some textfile busy errors when starting the AION kernel
 RUN sed '/\/rt\/bin\/java/ i\sleep \5;' -i /opt/aion/aion.sh
 
-## change miner address, allow external access to AION kernel, then start AION kernel with specified Aion Network
+## change miner address, allow external access to AION kernel, define genesisStakingDifficulty if you are running kernel on the testnet, then start AION kernel with specified Aion Network
 WORKDIR /
 CMD sed "s/<miner-address>.*\/miner-address>/<miner-address>$AION_MINING_ADDRESS<\/miner-address>/g" -i /opt/aion/config/$AION_NETWORK/config.xml && \
         sed 's/ip=\"127.0.0.1\"/ip=\"0.0.0.0\"/g' -i /opt/aion/config/$AION_NETWORK/config.xml && \
+        if [ "$AION_NETWORK" = "mastery" ] ; then jq --arg genesisStakingDifficulty 2000000000 '. + {genesisStakingDifficulty: $genesisStakingDifficulty}' /opt/aion/config/$AION_NETWORK/genesis.json > /tmp/tmp_genesis.json && \
+        mv /tmp/tmp_genesis.json /opt/aion/config/$AION_NETWORK/genesis.json ; fi && \
         /opt/aion/aion.sh -n $AION_NETWORK
 
 
